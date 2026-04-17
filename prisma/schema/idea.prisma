@@ -1,0 +1,26 @@
+model Idea {
+    id         String @id @default(cuid())
+    authorId   String
+    categoryId String
+
+    title             String     @db.VarChar(100)
+    problem           String
+    solution          String
+    description       String
+    thumbnail         String?
+    status            IdeaStatus @default(DRAFT)
+    isPaid            Boolean    @default(false)
+    price             Decimal?   @db.Money
+    rejectionFeedback String?    @db.VarChar(256)
+
+    isDeleted Boolean @default(false)
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    author   User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+    @@map("ideas")
+}

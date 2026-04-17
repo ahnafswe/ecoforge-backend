@@ -11,6 +11,8 @@ model Category {
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
 
+    ideas Idea[]
+
     @@index([name], name: "idx_category_name")
     @@map("categories")
 }
