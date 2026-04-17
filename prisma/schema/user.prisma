@@ -1,0 +1,18 @@
+model User {
+    id String @id @default(cuid())
+
+    name     String   @db.VarChar(100)
+    avatar   String?
+    email    String   @unique @db.VarChar(256)
+    password String
+    role     UserRole @default(MEMBER)
+
+    isBanned  Boolean @default(false)
+    banReason String? @db.VarChar(256)
+
+    isDeleted Boolean @default(false)
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+}
