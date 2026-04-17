@@ -15,5 +15,6 @@ model Vote {
     idea Idea @relation(fields: [ideaId], references: [id])
 
     @@unique([userId, ideaId])
+    @@index([userId, ideaId], name: "idx_vote_userId_ideaId")
     @@map("votes")
 }

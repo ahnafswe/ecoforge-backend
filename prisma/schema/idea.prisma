@@ -25,5 +25,8 @@ model Idea {
     comments Comment[]
     payments Payment[]
 
+    @@index([authorId], name: "idx_idea_authorId")
+    @@index([categoryId], name: "idx_idea_categoryId")
+    @@index([status, createdAt(sort: Desc)], name: "idx_idea_status_createdAt")
     @@map("ideas")
 }

@@ -17,5 +17,7 @@ model Comment {
     parent  Comment?  @relation(name: "CommentReplies", fields: [parentId], references: [id])
     replies Comment[] @relation("CommentReplies")
 
+    @@index([ideaId], name: "idx_comment_ideaId")
+    @@index([parentId], name: "idx_comment_parentId")
     @@map("comments")
 }

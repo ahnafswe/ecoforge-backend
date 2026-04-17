@@ -16,5 +16,6 @@ model Payment {
     idea Idea @relation(fields: [ideaId], references: [id])
 
     @@unique([userId, ideaId])
+    @@index([userId, ideaId], name: "idx_payment_userId_ideaId")
     @@map("payments")
 }
