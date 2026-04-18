@@ -2,7 +2,7 @@ model User {
     id String @id @default(cuid())
 
     name     String   @db.VarChar(100)
-    avatar   String?
+    image    String?
     email    String   @unique @db.VarChar(256)
     password String
     role     UserRole @default(MEMBER)
