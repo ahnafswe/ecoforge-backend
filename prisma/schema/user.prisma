@@ -1,11 +1,11 @@
 model User {
     id String @id @default(cuid())
 
-    name     String   @db.VarChar(100)
-    image    String?
-    email    String   @unique @db.VarChar(128)
-    password String
-    role     UserRole @default(MEMBER)
+    name          String   @db.VarChar(100)
+    image         String?
+    email         String   @unique @db.VarChar(128)
+    emailVerified Boolean
+    role          UserRole @default(MEMBER)
 
     isBanned  Boolean @default(false)
     banReason String? @db.VarChar(256)
