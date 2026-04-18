@@ -4,6 +4,11 @@ import { auth } from "../../lib/auth";
 import { ILoginUserPayload, ISignupMemberPayload } from "./auth.types";
 import { tokenUtils } from "../../utils/token";
 import { UserRole } from "../../../generated/prisma/enums";
+import { prisma } from "../../lib/prisma";
+import { jwtUtils } from "../../utils/jwt";
+import { envVars } from "../../config/env";
+import { JwtPayload } from "jsonwebtoken";
+import ms, { StringValue } from "ms";
 
 const signupMember = async (payload: ISignupMemberPayload) => {
 	const { name, image, email, password } = payload;
@@ -70,8 +75,71 @@ const logoutUser = async (sessionToken: string) => {
 	return result;
 };
 
+const renewTokens = async (refreshToken: string, sessionToken: string) => {
+	const session = await prisma.session.findUnique({
+		where: {
+			token: sessionToken,
+		},
+		include: {
+			user: true,
+		},
+	});
+
+	if (!session) {
+		throw new AppError(status.UNAUTHORIZED, "Invalid session token");
+	}
+
+	const verifiedRefreshToken = jwtUtils.verifyToken(
+		refreshToken,
+		envVars.REFRESH_TOKEN_SECRET,
+	);
+
+	if (!verifiedRefreshToken.success) {
+		throw new AppError(status.UNAUTHORIZED, "Invalid refresh token");
+	}
+
+	const user = verifiedRefreshToken.data as JwtPayload;
+
+	const newAccessToken = tokenUtils.getAccessToken({
+		userId: user.userId,
+		name: user.name,
+		email: user.email,
+		role: user.role,
+		emailVerified: user.emailVerified,
+		isDeleted: user.isDeleted,
+	});
+
+	const newRefreshToken = tokenUtils.getRefreshToken({
+		userId: user.userId,
+		name: user.name,
+		email: user.email,
+		role: user.role,
+		emailVerified: user.emailVerified,
+		isDeleted: user.isDeleted,
+	});
+
+	const { token: updatedSessionToken } = await prisma.session.update({
+		where: {
+			token: sessionToken,
+		},
+		data: {
+			expiresAt: new Date(
+				Date.now() + ms(envVars.SESSION_TOKEN_EXPIRES_IN as StringValue),
+			),
+			updatedAt: new Date(),
+		},
+	});
+
+	return {
+		accessToken: newAccessToken,
+		refreshToken: newRefreshToken,
+		sessionToken: updatedSessionToken,
+	};
+};
+
 export const authService = {
 	signupMember,
 	loginUser,
 	logoutUser,
+	renewTokens,
 };
