@@ -7,5 +7,6 @@ const router = Router();
 
 router.get("/me", auth(), usersController.getMe);
 router.get("/", auth(UserRole.ADMIN), usersController.getUsers);
+router.patch("/:id/role", auth(UserRole.ADMIN), usersController.updateUserRole);
 
 export const usersRouter = router;

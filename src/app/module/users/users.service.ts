@@ -92,7 +92,45 @@ const getUsers = async () => {
 	return users;
 };
 
+const updateUserRole = async (userId: string) => {
+	const user = await prisma.user.findUnique({
+		where: {
+			id: userId,
+			isDeleted: false,
+		},
+	});
+
+	if (!user) {
+		throw new AppError(status.NOT_FOUND, "User not found");
+	}
+
+	if (user.role === "ADMIN") {
+		await prisma.user.update({
+			where: {
+				id: userId,
+			},
+			data: {
+				role: "MEMBER",
+			},
+		});
+	} else {
+		await prisma.user.update({
+			where: {
+				id: userId,
+			},
+			data: {
+				role: "ADMIN",
+			},
+		});
+	}
+
+	const updatedUser = await prisma.user.findUnique({ where: { id: userId } });
+
+	return updatedUser;
+};
+
 export const usersService = {
 	getMe,
 	getUsers,
+	updateUserRole,
 };
