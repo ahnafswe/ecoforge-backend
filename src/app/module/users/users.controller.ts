@@ -17,6 +17,18 @@ const getMe = asyncHandler(async (req: Request, res: Response) => {
 	});
 });
 
+const getUsers = asyncHandler(async (_req: Request, res: Response) => {
+	const result = await usersService.getUsers();
+
+	return responseUtils.sendSuccessResponse({
+		res,
+		statusCode: status.OK,
+		message: "Users retrieved successfully",
+		data: result,
+	});
+});
+
 export const usersController = {
 	getMe,
+	getUsers,
 };

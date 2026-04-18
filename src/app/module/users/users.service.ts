@@ -8,6 +8,7 @@ const getMe = async (reqUser: IRequestUser) => {
 		where: {
 			id: reqUser.id,
 			role: reqUser.role,
+			isDeleted: false,
 		},
 		include: {
 			ideas: {
@@ -59,6 +60,39 @@ const getMe = async (reqUser: IRequestUser) => {
 	return user;
 };
 
+const getUsers = async () => {
+	const users = await prisma.user.findMany({
+		where: {
+			isDeleted: true,
+		},
+		include: {
+			ideas: {
+				include: {
+					category: true,
+				},
+			},
+			comments: {
+				include: {
+					idea: true,
+				},
+			},
+			votes: {
+				include: {
+					idea: true,
+				},
+			},
+			payments: {
+				include: {
+					idea: true,
+				},
+			},
+		},
+	});
+
+	return users;
+};
+
 export const usersService = {
 	getMe,
+	getUsers,
 };

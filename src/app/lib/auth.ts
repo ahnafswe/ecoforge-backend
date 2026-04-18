@@ -3,6 +3,8 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { UserRole } from "../../generated/prisma/enums";
 import { prisma } from "./prisma";
 import { envVars } from "../config/env";
+import { bearer } from "better-auth/plugins";
+import ms, { StringValue } from "ms";
 
 export const auth = betterAuth({
 	appName: "EcoForge",
@@ -23,6 +25,14 @@ export const auth = betterAuth({
 		google: {
 			clientId: envVars.GOOGLE_CLIENT_ID,
 			clientSecret: envVars.GOOGLE_CLIENT_SECRET,
+		},
+	},
+	session: {
+		expiresIn: ms(envVars.SESSION_TOKEN_EXPIRES_IN as StringValue) / 1000,
+		updateAge: ms(envVars.SESSION_TOKEN_UPDATE_AGE as StringValue) / 1000,
+		cookieCache: {
+			enabled: true,
+			maxAge: ms(envVars.SESSION_TOKEN_EXPIRES_IN as StringValue) / 1000,
 		},
 	},
 	user: {
@@ -52,4 +62,5 @@ export const auth = betterAuth({
 			},
 		},
 	},
+	plugins: [bearer()],
 });
