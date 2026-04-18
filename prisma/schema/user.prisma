@@ -3,7 +3,7 @@ model User {
 
     name     String   @db.VarChar(100)
     image    String?
-    email    String   @unique @db.VarChar(256)
+    email    String   @unique @db.VarChar(128)
     password String
     role     UserRole @default(MEMBER)
 
