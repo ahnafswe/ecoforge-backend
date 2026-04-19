@@ -1,3 +1,5 @@
+import status from "http-status";
+import { AppError } from "../../errors/AppError";
 import { prisma } from "../../lib/prisma";
 import { ICreateIdeaPayload, IGetIdeasQuery } from "./ideas.types";
 
@@ -84,7 +86,31 @@ const getIdeas = async (queries: IGetIdeasQuery) => {
 	return ideas;
 };
 
+const getIdeaById = async (ideaId: string) => {
+	const idea = await prisma.idea.findUnique({
+		where: {
+			id: ideaId,
+			isDeleted: false,
+			status: "APPROVED",
+		},
+		include: {
+			author: true,
+			category: true,
+			votes: true,
+			comments: true,
+			payments: true,
+		},
+	});
+
+	if (!idea) {
+		throw new AppError(status.NOT_FOUND, "Idea not found");
+	}
+
+	return idea;
+};
+
 export const ideasService = {
 	createIdea,
 	getIdeas,
+	getIdeaById,
 };

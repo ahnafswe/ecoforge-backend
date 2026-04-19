@@ -32,7 +32,21 @@ const getIdeas = asyncHandler(async (req: Request, res: Response) => {
 	});
 });
 
+const getIdeaById = asyncHandler(async (req: Request, res: Response) => {
+	const ideaId = req.params.id as string;
+
+	const result = await ideasService.getIdeaById(ideaId);
+
+	return responseUtils.sendSuccessResponse({
+		res,
+		statusCode: status.OK,
+		message: "Idea retrieved successfully",
+		data: result,
+	});
+});
+
 export const ideasController = {
 	createIdea,
 	getIdeas,
+	getIdeaById,
 };

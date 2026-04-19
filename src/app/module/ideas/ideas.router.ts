@@ -16,4 +16,6 @@ router.post(
 
 router.get("/", ideasController.getIdeas);
 
+router.get("/:id", auth(), ideasController.getIdeaById);
+
 export const ideasRouter = router;
