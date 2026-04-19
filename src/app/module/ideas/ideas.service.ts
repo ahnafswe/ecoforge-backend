@@ -109,8 +109,38 @@ const getIdeaById = async (ideaId: string) => {
 	return idea;
 };
 
+const getMyIdeas = async (userId: string) => {
+	const user = await prisma.user.findUnique({
+		where: { id: userId, isDeleted: false },
+	});
+
+	if (!user) {
+		throw new AppError(status.NOT_FOUND, "User not found");
+	}
+
+	if (user.isBanned) {
+		throw new AppError(status.FORBIDDEN, "User is banned");
+	}
+
+	const ideas = await prisma.idea.findMany({
+		where: {
+			authorId: userId,
+			isDeleted: false,
+		},
+		include: {
+			category: true,
+			votes: true,
+			comments: true,
+			payments: true,
+		},
+	});
+
+	return ideas;
+};
+
 export const ideasService = {
 	createIdea,
 	getIdeas,
 	getIdeaById,
+	getMyIdeas,
 };

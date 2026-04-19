@@ -45,8 +45,22 @@ const getIdeaById = asyncHandler(async (req: Request, res: Response) => {
 	});
 });
 
+const getMyIdeas = asyncHandler(async (req: Request, res: Response) => {
+	const userId = req.user.id;
+
+	const result = await ideasService.getMyIdeas(userId);
+
+	return responseUtils.sendSuccessResponse({
+		res,
+		statusCode: status.OK,
+		message: "Your ideas retrieved successfully",
+		data: result,
+	});
+});
+
 export const ideasController = {
 	createIdea,
 	getIdeas,
 	getIdeaById,
+	getMyIdeas,
 };
