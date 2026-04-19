@@ -2,6 +2,7 @@ import status from "http-status";
 import { AppError } from "../../errors/AppError";
 import { prisma } from "../../lib/prisma";
 import { IRequestUser } from "../../types/request.types";
+import { IUpdateUserStatusPayload } from "./users.types";
 
 const getMe = async (reqUser: IRequestUser) => {
 	const user = await prisma.user.findUnique({
@@ -117,7 +118,7 @@ const updateUserRole = async (userId: string) => {
 	return updatedUser;
 };
 
-const updateUserStatus = async (userId: string) => {
+const updateUserStatus = async (userId: string, payload: IUpdateUserStatusPayload) => {
 	const user = await prisma.user.findUnique({
 		where: {
 			id: userId,
@@ -135,6 +136,7 @@ const updateUserStatus = async (userId: string) => {
 		},
 		data: {
 			isBanned: !user.isBanned,
+			banReason: payload.banReason,
 		},
 	});
 

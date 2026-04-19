@@ -43,8 +43,9 @@ const updateUserRole = asyncHandler(async (req: Request, res: Response) => {
 
 const updateUserStatus = asyncHandler(async (req: Request, res: Response) => {
 	const userId = req.params.id as string;
+	const payload = req.body;
 
-	const result = await usersService.updateUserStatus(userId);
+	const result = await usersService.updateUserStatus(userId, payload);
 
 	return responseUtils.sendSuccessResponse({
 		res,
