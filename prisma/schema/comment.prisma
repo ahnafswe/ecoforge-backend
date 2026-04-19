@@ -1,8 +1,7 @@
 model Comment {
-    id       String  @id @default(cuid())
-    userId   String
-    ideaId   String
-    parentId String?
+    id     String @id @default(cuid())
+    userId String
+    ideaId String
 
     content String
 
@@ -12,12 +11,9 @@ model Comment {
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
 
-    user    User      @relation(fields: [userId], references: [id])
-    idea    Idea      @relation(fields: [ideaId], references: [id])
-    parent  Comment?  @relation(name: "CommentReplies", fields: [parentId], references: [id])
-    replies Comment[] @relation("CommentReplies")
+    user User @relation(fields: [userId], references: [id])
+    idea Idea @relation(fields: [ideaId], references: [id])
 
     @@index([ideaId], name: "idx_comment_ideaId")
-    @@index([parentId], name: "idx_comment_parentId")
     @@map("comments")
 }

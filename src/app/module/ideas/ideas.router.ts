@@ -14,4 +14,6 @@ router.post(
 	ideasController.createIdea,
 );
 
+router.get("/", ideasController.getIdeas);
+
 export const ideasRouter = router;

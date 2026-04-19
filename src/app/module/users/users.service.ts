@@ -17,13 +17,6 @@ const getMe = async (reqUser: IRequestUser) => {
 					category: {
 						select: { icon: true, name: true, description: true },
 					},
-					comments: {
-						include: {
-							user: true,
-							parent: true,
-							replies: true,
-						},
-					},
 					votes: {
 						include: {
 							user: true,
@@ -37,8 +30,6 @@ const getMe = async (reqUser: IRequestUser) => {
 			comments: {
 				include: {
 					idea: true,
-					parent: true,
-					replies: true,
 				},
 			},
 			votes: {
