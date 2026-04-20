@@ -32,7 +32,21 @@ const getComments = asyncHandler(async (req: Request, res: Response) => {
 	});
 });
 
+const deleteComment = asyncHandler(async (req: Request, res: Response) => {
+	const commentId = req.params.id as string;
+
+	const result = await commentsService.deleteComment(commentId);
+
+	return responseUtils.sendSuccessResponse({
+		res,
+		statusCode: status.OK,
+		message: "Comment deleted successfully",
+		data: result,
+	});
+});
+
 export const commentsController = {
 	createComment,
 	getComments,
+	deleteComment,
 };
