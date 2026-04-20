@@ -29,7 +29,21 @@ const reviewIdea = asyncHandler(async (req: Request, res: Response) => {
 	});
 });
 
+const deleteIdea = asyncHandler(async (req: Request, res: Response) => {
+	const ideaId = req.params.id as string;
+
+	const result = await ideaModerationService.deleteIdea(ideaId);
+
+	return responseUtils.sendSuccessResponse({
+		res,
+		statusCode: status.OK,
+		message: "Idea deleted successfully",
+		data: result,
+	});
+});
+
 export const ideaModerationController = {
 	getAllIdeas,
 	reviewIdea,
+	deleteIdea,
 };

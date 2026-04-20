@@ -16,4 +16,6 @@ router.patch(
 	ideaModerationController.reviewIdea,
 );
 
+router.delete("/:id", auth(UserRole.ADMIN), ideaModerationController.deleteIdea);
+
 export const ideaModerationRouter = router;
