@@ -8,6 +8,7 @@ import ms, { StringValue } from "ms";
 
 export const auth = betterAuth({
 	appName: "EcoForge",
+	baseURL: envVars.BACKEND_URL,
 	basePath: "/api/v1/better-auth",
 	database: prismaAdapter(prisma, {
 		provider: "postgresql",

@@ -81,6 +81,7 @@ const getIdeas = async (queries: IGetIdeasQuery) => {
 					userId: true,
 					amount: true,
 					transactionId: true,
+					status: true,
 					createdAt: true,
 				},
 			},

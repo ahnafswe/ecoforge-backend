@@ -14,3 +14,9 @@ enum VoteType {
     UPVOTE
     DOWNVOTE
 }
+
+enum PaymentStatus {
+    PENDING
+    COMPLETED
+    FAILED
+}
