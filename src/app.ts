@@ -1,4 +1,5 @@
 import express, { Application, Request, Response } from "express";
+import cors from "cors";
 import { globalErrorHandler } from "./app/middlewares/globalErrorHandler.middleware";
 import { notFound } from "./app/middlewares/notFound.middleware";
 import { toNodeHandler } from "better-auth/node";
@@ -7,6 +8,13 @@ import cookieParser from "cookie-parser";
 import { indexRouter } from "./app/routes";
 
 const app: Application = express();
+
+app.use(
+	cors({
+		origin: ["http://localhost:3000"],
+		credentials: true,
+	}),
+);
 
 app.all("/api/v1/better-auth/*splat", toNodeHandler(auth));
 

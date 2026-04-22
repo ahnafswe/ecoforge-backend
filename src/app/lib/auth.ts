@@ -5,6 +5,7 @@ import { prisma } from "./prisma";
 import { envVars } from "../config/env";
 import { bearer } from "better-auth/plugins";
 import ms, { StringValue } from "ms";
+import { sendAuthEmail } from "./email";
 
 export const auth = betterAuth({
 	appName: "EcoForge",
@@ -20,6 +21,10 @@ export const auth = betterAuth({
 	},
 	emailVerification: {
 		sendOnSignUp: true,
+		autoSignInAfterVerification: true,
+		sendVerificationEmail: async ({ user, url }) => {
+			await sendAuthEmail(user.email, url, "verify");
+		},
 	},
 	socialProviders: {
 		google: {

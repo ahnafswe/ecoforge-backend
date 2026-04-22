@@ -19,6 +19,10 @@ interface EnvConfig {
 	STORE_ID: string;
 	STORE_PASSWORD: string;
 	IS_LIVE: string;
+	SMTP_USER: string;
+	SMTP_PASS: string;
+	SMTP_HOST: string;
+	SMTP_PORT: string;
 	DATABASE_URL: string;
 }
 
@@ -40,6 +44,10 @@ const loadEnvVars = (): EnvConfig => {
 		"STORE_ID",
 		"STORE_PASSWORD",
 		"IS_LIVE",
+		"SMTP_USER",
+		"SMTP_PASS",
+		"SMTP_HOST",
+		"SMTP_PORT",
 		"DATABASE_URL",
 	];
 	requiredEnvVars.forEach((envVar) => {
@@ -66,6 +74,10 @@ const loadEnvVars = (): EnvConfig => {
 		STORE_ID: process.env.STORE_ID as string,
 		STORE_PASSWORD: process.env.STORE_PASSWORD as string,
 		IS_LIVE: process.env.IS_LIVE as string,
+		SMTP_USER: process.env.SMTP_USER as string,
+		SMTP_PASS: process.env.SMTP_PASS as string,
+		SMTP_HOST: process.env.SMTP_HOST as string,
+		SMTP_PORT: process.env.SMTP_PORT as string,
 		DATABASE_URL: process.env.DATABASE_URL as string,
 	};
 };
