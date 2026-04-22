@@ -7,6 +7,7 @@ import { ideasRouter } from "../module/ideas/ideas.router";
 import { usersRouter } from "../module/users/users.router";
 import { votesRouter } from "../module/votes/votes.router";
 import { paymentsRouter } from "../module/payments/payments.router";
+import { mediaRouter } from "../module/media/media.router";
 
 const router = Router();
 
@@ -17,6 +18,7 @@ router.use("/ideas", ideasRouter);
 router.use("/ideas/admin", ideaModerationRouter);
 router.use("/vote", votesRouter);
 router.use("/comments", commentsRouter);
+router.use("/media", mediaRouter);
 router.use("/payments", paymentsRouter);
 
 export const indexRouter = router;

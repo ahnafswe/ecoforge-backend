@@ -23,6 +23,9 @@ interface EnvConfig {
 	SMTP_PASS: string;
 	SMTP_HOST: string;
 	SMTP_PORT: string;
+	CLOUDINARY_CLOUD_NAME: string;
+	CLOUDINARY_API_KEY: string;
+	CLOUDINARY_API_SECRET: string;
 	DATABASE_URL: string;
 }
 
@@ -48,6 +51,9 @@ const loadEnvVars = (): EnvConfig => {
 		"SMTP_PASS",
 		"SMTP_HOST",
 		"SMTP_PORT",
+		"CLOUDINARY_CLOUD_NAME",
+		"CLOUDINARY_API_KEY",
+		"CLOUDINARY_API_SECRET",
 		"DATABASE_URL",
 	];
 	requiredEnvVars.forEach((envVar) => {
@@ -78,6 +84,9 @@ const loadEnvVars = (): EnvConfig => {
 		SMTP_PASS: process.env.SMTP_PASS as string,
 		SMTP_HOST: process.env.SMTP_HOST as string,
 		SMTP_PORT: process.env.SMTP_PORT as string,
+		CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME as string,
+		CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY as string,
+		CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET as string,
 		DATABASE_URL: process.env.DATABASE_URL as string,
 	};
 };
