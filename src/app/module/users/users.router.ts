@@ -9,7 +9,7 @@ const router = Router();
 
 router.get("/me", auth(), usersController.getMe);
 
-router.get("/", auth(UserRole.ADMIN), usersController.getUsers);
+router.get("/members", auth(UserRole.ADMIN), usersController.getMembers);
 
 router.patch("/:id/role", auth(UserRole.ADMIN), usersController.updateUserRole);
 

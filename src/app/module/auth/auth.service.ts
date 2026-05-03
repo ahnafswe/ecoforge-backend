@@ -39,6 +39,10 @@ const loginUser = async (payload: ILoginUserPayload) => {
 		throw new AppError(status.NOT_FOUND, "Unable to login user because user is deleted.");
 	}
 
+	if (data.user.isBanned) {
+		throw new AppError(status.FORBIDDEN, "Unable to login user because user is banned.");
+	}
+
 	return data;
 };
 

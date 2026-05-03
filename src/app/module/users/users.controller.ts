@@ -17,13 +17,13 @@ const getMe = asyncHandler(async (req: Request, res: Response) => {
 	});
 });
 
-const getUsers = asyncHandler(async (_req: Request, res: Response) => {
-	const result = await usersService.getUsers();
+const getMembers = asyncHandler(async (_req: Request, res: Response) => {
+	const result = await usersService.getMembers();
 
 	return responseUtils.sendSuccessResponse({
 		res,
 		statusCode: status.OK,
-		message: "Users retrieved successfully",
+		message: "Members retrieved successfully",
 		data: result,
 	});
 });
@@ -57,7 +57,7 @@ const updateUserStatus = asyncHandler(async (req: Request, res: Response) => {
 
 export const usersController = {
 	getMe,
-	getUsers,
+	getMembers,
 	updateUserRole,
 	updateUserStatus,
 };

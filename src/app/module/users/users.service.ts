@@ -10,6 +10,7 @@ const getMe = async (reqUser: IRequestUser) => {
 			id: reqUser.id,
 			role: reqUser.role,
 			isDeleted: false,
+			isBanned: false,
 		},
 		include: {
 			_count: {
@@ -49,10 +50,11 @@ const getMe = async (reqUser: IRequestUser) => {
 	return user;
 };
 
-const getUsers = async () => {
+const getMembers = async () => {
 	const users = await prisma.user.findMany({
 		where: {
-			isDeleted: true,
+			role: "MEMBER",
+			isDeleted: false,
 		},
 		orderBy: {
 			createdAt: "desc",
@@ -77,6 +79,7 @@ const updateUserRole = async (userId: string) => {
 		where: {
 			id: userId,
 			isDeleted: false,
+			isBanned: false,
 		},
 	});
 
@@ -127,7 +130,7 @@ const updateUserStatus = async (userId: string, payload: IUpdateUserStatusPayloa
 		},
 		data: {
 			isBanned: !user.isBanned,
-			banReason: payload.banReason,
+			banReason: !user.isBanned ? payload.banReason : undefined,
 		},
 	});
 
@@ -136,7 +139,7 @@ const updateUserStatus = async (userId: string, payload: IUpdateUserStatusPayloa
 
 export const usersService = {
 	getMe,
-	getUsers,
+	getMembers,
 	updateUserRole,
 	updateUserStatus,
 };

@@ -35,7 +35,15 @@ const getCategories = async () => {
 		},
 	});
 
-	return categories;
+	const chartData = categories
+		.map((category) => ({
+			name: category.name,
+			value: category._count.ideas,
+		}))
+		.filter((category) => category.value > 0)
+		.sort((x, y) => y.value - x.value);
+
+	return { categories, chartData };
 };
 
 const updateCategory = async (categoryId: string, payload: IUpdateCategoryPayload) => {

@@ -4,6 +4,8 @@ const uploadImage = async (
 	fileBuffer: Buffer,
 	mimeType: string,
 	folder: string = "ecoforge_images",
+	width: number,
+	height: number,
 ): Promise<string> => {
 	const b64 = fileBuffer.toString("base64");
 	const dataURI = `data:${mimeType};base64,${b64}`;
@@ -12,7 +14,7 @@ const uploadImage = async (
 		folder,
 		resource_type: "auto",
 		transformation: [
-			{ width: 500, height: 500, crop: "fill", gravity: "face" },
+			{ width, height, crop: "fill", gravity: "face" },
 			{ quality: "auto", fetch_format: "auto" },
 		],
 	});

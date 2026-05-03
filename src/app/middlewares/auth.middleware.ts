@@ -9,12 +9,17 @@ export const auth =
 	(...roles: UserRole[]) =>
 	async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const sessionToken = cookieUtils.getCookie(req, "session_token");
+			const sessionToken: string | undefined = cookieUtils.getCookie(
+				req,
+				"session_token",
+			);
 
 			if (sessionToken) {
+				const splitSessionToken = sessionToken?.split(".")[0];
+
 				const session = await prisma.session.findFirst({
 					where: {
-						token: sessionToken,
+						token: splitSessionToken,
 						expiresAt: {
 							gt: new Date(),
 						},

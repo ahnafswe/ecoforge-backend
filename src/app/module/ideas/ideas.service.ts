@@ -14,6 +14,7 @@ const createIdea = async (authorId: string, payload: ICreateIdeaPayload) => {
 
 	return idea;
 };
+
 const getIdeas = async (queries: IGetIdeasQuery) => {
 	const skip = queries.page && queries.limit ? (queries.page - 1) * queries.limit : 0;
 	const take = queries.limit || 12;
@@ -91,7 +92,7 @@ const getIdeas = async (queries: IGetIdeasQuery) => {
 	return ideas;
 };
 
-const getIdeaById = async (ideaId: string) => {
+const getIdeaById = async (ideaId: string, userId: string) => {
 	const idea = await prisma.idea.findUnique({
 		where: {
 			id: ideaId,
@@ -105,6 +106,14 @@ const getIdeaById = async (ideaId: string) => {
 					comments: true,
 				},
 			},
+			votes: {
+				where: {
+					userId,
+				},
+				select: {
+					type: true,
+				},
+			},
 			author: true,
 			category: true,
 			payments: true,
@@ -115,7 +124,10 @@ const getIdeaById = async (ideaId: string) => {
 		throw new AppError(status.NOT_FOUND, "Idea not found");
 	}
 
-	return idea;
+	return {
+		...idea,
+		userVote: idea.votes?.at(0)?.type,
+	};
 };
 
 const getMyIdeas = async (userId: string) => {
@@ -154,13 +166,57 @@ const getMyIdeas = async (userId: string) => {
 	return ideas;
 };
 
+const getIdeasTrend = async () => {
+	const sevenDaysAgo = new Date();
+	sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+	sevenDaysAgo.setHours(0, 0, 0, 0);
+
+	const thisWeekIdeas = await prisma.idea.findMany({
+		where: {
+			createdAt: {
+				gte: sevenDaysAgo,
+			},
+		},
+		select: {
+			createdAt: true,
+		},
+	});
+
+	const trendData = Array.from({ length: 7 }).map((_, i) => {
+		const date = new Date();
+		date.setDate(date.getDate() - (6 - i));
+
+		return {
+			label: date.toLocaleDateString("en-US", { weekday: "short" }),
+			date: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+			Ideas: 0,
+		};
+	});
+
+	thisWeekIdeas.forEach((idea) => {
+		const ideaDate = new Date(idea.createdAt);
+
+		const match = trendData.find(
+			(day) =>
+				day.date ===
+				ideaDate.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+		);
+
+		if (match) {
+			match.Ideas += 1;
+		}
+	});
+
+	return trendData;
+};
+
 const updateIdea = async (ideaId: string, payload: IUpdateIdeaPayload) => {
 	const idea = await prisma.idea.findUnique({
 		where: {
 			id: ideaId,
 			isDeleted: false,
 			status: {
-				in: ["DRAFT", "REJECTED"],
+				not: "APPROVED",
 			},
 		},
 	});
@@ -215,6 +271,7 @@ export const ideasService = {
 	getIdeas,
 	getIdeaById,
 	getMyIdeas,
+	getIdeasTrend,
 	updateIdea,
 	deleteIdea,
 };

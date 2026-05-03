@@ -33,9 +33,10 @@ const getIdeas = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const getIdeaById = asyncHandler(async (req: Request, res: Response) => {
+	const userId = req.user.id;
 	const ideaId = req.params.id as string;
 
-	const result = await ideasService.getIdeaById(ideaId);
+	const result = await ideasService.getIdeaById(ideaId, userId);
 
 	return responseUtils.sendSuccessResponse({
 		res,
@@ -54,6 +55,17 @@ const getMyIdeas = asyncHandler(async (req: Request, res: Response) => {
 		res,
 		statusCode: status.OK,
 		message: "Your ideas retrieved successfully",
+		data: result,
+	});
+});
+
+const getIdeasTrend = asyncHandler(async (req: Request, res: Response) => {
+	const result = await ideasService.getIdeasTrend();
+
+	return responseUtils.sendSuccessResponse({
+		res,
+		statusCode: status.OK,
+		message: "Ideas trend retrieved successfully",
 		data: result,
 	});
 });
@@ -90,6 +102,7 @@ export const ideasController = {
 	getIdeas,
 	getIdeaById,
 	getMyIdeas,
+	getIdeasTrend,
 	updateIdea,
 	deleteIdea,
 };
