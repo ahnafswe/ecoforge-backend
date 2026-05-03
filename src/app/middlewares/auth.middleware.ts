@@ -9,10 +9,9 @@ export const auth =
 	(...roles: UserRole[]) =>
 	async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const sessionToken: string | undefined = cookieUtils.getCookie(
-				req,
-				"session_token",
-			);
+			const sessionToken: string | undefined =
+				cookieUtils.getCookie(req, "session_token") ||
+				cookieUtils.getCookie(req, "__Secure-session_token");
 
 			if (sessionToken) {
 				const splitSessionToken = sessionToken?.split(".")[0];
